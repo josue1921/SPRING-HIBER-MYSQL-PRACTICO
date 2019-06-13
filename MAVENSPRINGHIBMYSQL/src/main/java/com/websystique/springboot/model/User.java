@@ -20,8 +20,27 @@ public class User implements Serializable{
     @Column(name="AGE", nullable=false)
     private Integer age;
  
-    @Column(name="SALARY", nullable=false)
-    private double salary;
+    @Column(name="PHONE", nullable=false)
+    private String phone;
+    
+    @Column(name="EMAIL", nullable=false)
+    private String email;
+    
+    @Column(name="APAT", nullable=false)
+    private String apat;
+    
+    @Column(name="AMAT", nullable=false)
+    private String amat;
+
+    @Column(name="IES", nullable=false)
+    private String ies;
+    
+    @Column(name="RFC", nullable=false)
+    private String rfc;
+    
+    @Column(name="ESTATUS", nullable=false)
+    private String estatus;
+    
 
 	public Long getId() {
 		return id;
@@ -47,11 +66,60 @@ public class User implements Serializable{
 		this.age = age;
 	}
 
-	public double getSalary() {
-		return salary;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setSalary(double salary) {
-		this.salary = salary;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getApat() {
+		return apat;
+	}
+
+	public void setApat(String apat) {
+		this.apat = apat;
+	}
+
+	public String getAmat() {
+		return amat;
+	}
+
+	public void setAmat(String amat) {
+		this.amat = amat;
+	}
+
+	public String getIs() {
+		return ies;
+	}
+
+	public void setIes(String ies) {
+		this.ies = ies;
+	}
+
+	public String getRfc() {
+		return rfc;
+	}
+
+	public void setRfc(String rfc) {
+		this.rfc = rfc;
+	}
+
+	public String getEstatus() {
+		return estatus;
+	}
+
+	public void setEstatus(String estatus) {
+		this.estatus = estatus;
+	}
+	
 }

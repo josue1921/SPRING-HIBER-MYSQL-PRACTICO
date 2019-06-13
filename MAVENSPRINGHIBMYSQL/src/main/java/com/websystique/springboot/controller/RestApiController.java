@@ -21,54 +21,52 @@ import com.websystique.springboot.service.UserService;
 import com.websystique.springboot.util.CustomErrorType;
  
 @RestController
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT,RequestMethod.DELETE})
 @RequestMapping("/api")
 public class RestApiController {
  
     public static final Logger logger = LoggerFactory.getLogger(RestApiController.class);
  
     @Autowired
-    UserService userService; //Service which will do all data retrieval/manipulation work
+    UserService userService; 
  
-    // -------------------Retrieve All Users---------------------------------------------
+    // -------------------Devuelve todos los usuarios---------------------------------------------
  
     @RequestMapping(value = "/user/", method = RequestMethod.GET)
     public ResponseEntity<List<User>> listAllUsers() {
         List<User> users = userService.findAllUsers();
         if (users.isEmpty()) {
             return new ResponseEntity(HttpStatus.NO_CONTENT);
-            // You many decide to return HttpStatus.NOT_FOUND
         }
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
  
-    // -------------------Retrieve Single User------------------------------------------
+    // ------------------- Retorna solo un Usuario ------------------------------------------
  
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> getUser(@PathVariable("id") long id) {
-        logger.info("Fetching User with id {}", id);
+        logger.info("Usuario con el id{}", id);
         User user = userService.findById(id);
         if (user == null) {
-            logger.error("User with id {} not found.", id);
-            return new ResponseEntity(new CustomErrorType("User with id " + id 
-                    + " not found"), HttpStatus.NOT_FOUND);
+            logger.error("Usuario con id {} no localizado.", id);
+            return new ResponseEntity(new CustomErrorType("Usuario con id" + id 
+                    + " no encontrado"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
  
-    // -------------------Create a User-------------------------------------------
+    // -------------------Alta de un nuevo Usuario-------------------------------------------
  
     @RequestMapping(value = "/user/", method = RequestMethod.POST)
     public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
-        logger.info("Creating User : {}", user);
+        logger.info("Creando usuario: {}", user);
  
         if (userService.isUserExist(user)) {
-            logger.error("Unable to create. A User with name {} already exist", user.getName());
-            return new ResponseEntity(new CustomErrorType("Unable to create. A User with name " + 
-            user.getName() + " already exist."),HttpStatus.CONFLICT);
+            logger.error("No es posible la creacion del usuario {} actualmente ya existe", user.getName());
+            return new ResponseEntity(new CustomErrorType("No es posible la creacion del usuario " + 
+            user.getName() + " actualmente ya existe."),HttpStatus.CONFLICT);
         }
         userService.saveUser(user);
- 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/api/user/{id}").buildAndExpand(user.getId()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
@@ -90,7 +88,7 @@ public class RestApiController {
  
         currentUser.setName(user.getName());
         currentUser.setAge(user.getAge());
-        currentUser.setSalary(user.getSalary());
+        currentUser.setPhone(user.getPhone());
  
         userService.updateUser(currentUser);
         return new ResponseEntity<User>(currentUser, HttpStatus.OK);
