@@ -1,0 +1,250 @@
+<link rel="import" href="/bower_components/polymer/polymer-element.html">
+<link rel="import" href="/bower_components/paper-input/paper-input.html">
+<link rel="import" href="/bower_components/paper-button/paper-button.html">
+<link rel="import" href="/bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="/bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="/bower_components/iron-form/iron-form.html">
+
+<dom-module id="register-person">
+  <template>
+    <iron-ajax
+        id="connectBD"
+        url="http://localhost:8080/SpringBootCRUDApp/api/user/[[id]]"
+        handle-as="[[handleAs]]"
+        method="[[method]]"
+        content-type="application/json"
+        on-response="{{respuestaRecibida}}"
+        on-error="{{errorRecibido}}"
+        last-response="{{lastResponse}}">
+    </iron-ajax>
+    <style>
+      .form {
+        border-style: outset;
+        border-radius: 10px;
+      }
+      .resultados {
+        border-style: outset;
+        border-radius: 10px;
+      }
+      .form + .resultados {
+        margin-top: 2em;
+      }
+      .green {
+        background-color: black;
+        color: white;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      tr:nth-of-type(odd) {
+        background: #eee;
+      }
+      th {
+        background: #333;
+        color: white;
+        font-weight: bold;
+      }
+      td, th {
+        padding: 6px;
+        border: 1px solid #ccc;
+        text-align: left;
+      }
+      @media
+      only screen and (max-width: 760px),
+      (min-device-width: 768px) and (max-device-width: 1024px)  {
+	       table, thead, tbody, th, td, tr {
+		         display: block;
+	       }
+	       thead tr {
+		         position: absolute;
+		         top: -9999px;
+		         left: -9999px;
+	       }
+	       tr { border: 1px solid #ccc; }
+	       td {
+		         border: none;
+		         border-bottom: 1px solid #eee;
+		         position: relative;
+		         padding-left: 50%;
+	       }
+	       td:before {
+		         position: absolute;
+		         top: 6px;
+		         left: 6px;
+		         width: 45%;
+	           padding-right: 10px;
+		         white-space: nowrap;
+	       }
+  td:nth-of-type(1):before { content: "Id Persona"; }
+	td:nth-of-type(2):before { content: "Nombre"; }
+  td:nth-of-type(3):before { content: "Apellido Paterno"; }
+  td:nth-of-type(4):before { content: "Apellido Materno"; }
+  td:nth-of-type(5):before { content: "Email"; }
+	td:nth-of-type(6):before { content: "Telefono"; }
+  td:nth-of-type(7):before { content: "RFC"; }
+  td:nth-of-type(8):before { content: "Acciones"; }
+      }
+    </style>
+    <div class="form">
+      <iron-icon icon="person"></iron-icon>
+      <form id="form" role="form" is="iron-form">
+        <paper-input label="Nombre" id="name" auto-validate pattern="[a-zA-z\s]{1,}" allowed-pattern="[a-zA-Z\s]" required="true">
+          <iron-icon icon="account-circle" slot="prefix"></iron-icon>
+        </paper-input>
+        <paper-input label="Apellido paterno" id="apat" auto-validate pattern="[a-zA-z\s]{1,}" allowed-pattern="[a-zA-Z\s]" error-message="Formato invalido solo se aceptan letras." required="true">
+          <iron-icon icon="account-box" slot="prefix"></iron-icon>
+        </paper-input>
+        <paper-input label="Apellido Materno" id="amat" auto-validate pattern="[a-zA-z\s]{1,}" allowed-pattern="[a-zA-Z\s]" error-message="Formato invalido solo se aceptan letras." required="true">
+          <iron-icon icon="perm-phone-msg" slot="prefix"></iron-icon>
+        </paper-input>
+        <paper-input label="Edad" id="age" auto-validate allowed-pattern="[0-9]" pattern="(\d){1,2}" error-message="Edad incorrecta solo 2 digitos." required="true">
+          <iron-icon icon="account-box" slot="prefix"></iron-icon>
+        </paper-input>
+        <paper-input label="Email" id="email" auto-validate auto-validate pattern="^([a-z]+[a-z1-9._-]*)@{1}([a-z1-9\.]{2,})\.([a-z]{2,3})" allowed-pattern="[a-zA-z@.]" error-message="Formato de email es incorrecto." required="true">
+          <iron-icon icon="account-circle" slot="prefix"></iron-icon>
+        </paper-input>
+        <paper-input label="Telefono" id="tel" auto-validate allowed-pattern="[0-9]{1,}" pattern="(\d){1,10}" error-message="Telefono no valido" required="true">
+          <iron-icon icon="perm-phone-msg" slot="prefix"></iron-icon>
+        </paper-input>
+        <paper-input label="RFC" id="rfc" auto-validate error-message="Formato invalido." required="true">
+          <iron-icon icon="perm-phone-msg" slot="prefix"></iron-icon>
+        </paper-input>
+        <paper-input label="IS" id="ies" auto-validate pattern="[a-zA-z\s]{1,4}" allowed-pattern="[a-zA-Z\s]" error-message="Formato invalido solo se aceptan letras." required="true">
+          <iron-icon icon="perm-phone-msg" slot="prefix"></iron-icon>
+        </paper-input>
+        <center><paper-button toggles raised class = "green" on-click="saveInfo" >Guardar</paper-button><paper-button toggles raised class = "green" on-click="resetForm" >Limpiar</paper-button></center>
+      </form>
+    </div>
+    <div class="resultados">
+      <table>
+        <thead>
+          <tr><th align="center" colspan="8"> Listado de usuarios </th></tr>
+          <tr><th>Id Persona</th><th>Nombre</th><th>Apellido Paterno</th><th>Apellido Materno</th><th> Email </th><th> Telefono </th><th> RFC </th><th> Acciones </th></tr>
+        </thead>
+        <tbody>
+          <template is="dom-repeat" items="{{lastResponse}}">
+            <tr><td>{{item.id}}</td><td>{{item.name}}</td><td>{{item.apat}}</td><td>{{item.amat}}</td><td>{{item.email}}</td><td>{{item.phone}}</td><td>{{item.rfc}}</td><td align="center"><center><iron-icon icon="delete-forever" on-click="delete" value="[[item.id]]" slot="prefix"></iron-icon><iron-icon icon="note-add" on-click="_printGeneral" value="[[item.id]]" slot="prefix"></iron-icon></center></td></tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </template>
+  <script>
+    class RegisterPerson extends Polymer.Element {
+      static get is() { return 'register-person'; }
+      static get properties() {
+        return {
+          urlUser: {
+            type: String,
+            value: "http://localhost:8080/SpringBootCRUDApp/api/user/"
+          },
+          list: {
+            type: Array,
+            value: []
+          },
+          id: {type: String },
+          method: {type: String, value: ''},
+          handleAs: {type: String, value : 'json'},
+          respuestaRecibida: function (e, request) {
+            if (request.succeeded) {
+              this.mensaje = 'la solicitud se resolvió correctamente con código ' + request.status;
+            } else {
+              this.mensaje = 'la solicitud nos ofreció resultados incorrectos, con código ' + request.status;
+            }
+          },
+          errorRecibido: function (e, error) {
+             console.log(error.request.status);
+             this.mensaje = 'Error en la solicitud, con código ' + error.request.status;
+          },
+          lastResponse: {type: Object, notify: true},
+        };
+      }
+
+      ready(){
+        super.ready()
+        //this._printValues();  //Funcionalidad con funciones fetch
+        this.cargar();
+      }
+      cargar() {
+          this.method = 'GET'
+          this.$.connectBD.generateRequest();
+      }
+      saveInfo() {
+        let name =  this.$.name.value;
+        let apat = this.$.apat.value;
+        let amat = this.$.amat.value;
+        let age =  this.$.age.value;
+        let email =  this.$.email.value;
+        let tel =  this.$.tel.value;
+        let rfc = this.$.rfc.value;
+        let ies = this.$.ies.value;
+        let est = "ACTIVO";
+        let data = {name: name, apat : apat, amat : amat, age: age, email : email, phone : tel, rfc : rfc, estatus : est ,ies : ies };
+        this.$.connectBD.body = data;
+        this.method = 'POST'
+        this.$.connectBD.generateRequest();
+        this.cargar();
+      }
+      delete(e) {
+        let id = e.target.value;
+        this.id = id;
+        this.method = 'DELETE'
+        this.$.connectBD.generateRequest();
+        this.id = '';
+      }
+
+      // saveInfo() {
+      //   let name =  this.$.name.value;
+      //   let age =  this.$.age.value;
+      //   let tel =  this.$.tel.value;
+      //   let data = {name: name, age: age, salary: tel};
+      //   fetch(this.urlUser, {
+      //        method: 'POST',
+      //        headers: {
+      //          "Content-type" : "application/json; charset=UTF-8"
+      //        },
+      //        body: JSON.stringify(data)
+      //     })
+      //     .then((resp) => resp.text())
+      //     .then((response) => {
+      //       console.info('fetch()', response);
+      //       this._printValues();
+      //       return response;
+      //   });
+      // }
+      // async _printValues() {
+      //   let dataUSU = await this._extractApi(this.urlUser);
+      //     this.list = dataUSU;
+      // }
+      // _extractApi(url) {
+      // return new Promise ((resolve, reject) => {
+      //   let URI = url;
+      //   fetch(URI)
+      //     .then(function(response) {return response.json();})
+      //     .then(function(json) {resolve(json);})
+      //     .catch(function(error){reject('No se pudo solcitar debido ' + error + ':(intente mas tarde');});
+      //   });
+      // }
+      // resetForm() {
+      //   this.$.name.value = "";
+      //   this.$.age.value = "";
+      //   this.$.tel.value = "";
+      // }
+      // delete(e) {
+      //   let id = e.target.value;
+      //   fetch(this.urlUser + id, {
+      //        method: 'DELETE'
+      //     }).then(() => {
+      //       this._printValues();
+      //       console.log('Eliminado');
+      //     }).catch(err => {
+      //       console.info(err);
+      //
+      //   });
+      // }
+    }
+    window.customElements.define(RegisterPerson.is, RegisterPerson);
+  </script>
+</dom-module>
