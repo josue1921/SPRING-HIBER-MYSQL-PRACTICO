@@ -76,14 +76,14 @@
 	           padding-right: 10px;
 		         white-space: nowrap;
 	       }
-  td:nth-of-type(1):before { content: "Id Persona"; }
-	td:nth-of-type(2):before { content: "Nombre"; }
-  td:nth-of-type(3):before { content: "Apellido Paterno"; }
-  td:nth-of-type(4):before { content: "Apellido Materno"; }
-  td:nth-of-type(5):before { content: "Email"; }
-	td:nth-of-type(6):before { content: "Telefono"; }
-  td:nth-of-type(7):before { content: "RFC"; }
-  td:nth-of-type(8):before { content: "Acciones"; }
+          td:nth-of-type(1):before { content: "Id Persona"; }
+          td:nth-of-type(2):before { content: "Nombre"; }
+          td:nth-of-type(3):before { content: "Apellido Paterno"; }
+          td:nth-of-type(4):before { content: "Apellido Materno"; }
+          td:nth-of-type(5):before { content: "Email"; }
+	        td:nth-of-type(6):before { content: "Telefono"; }
+          td:nth-of-type(7):before { content: "RFC"; }
+          td:nth-of-type(8):before { content: "Acciones"; }
       }
     </style>
     <div class="form">
@@ -160,10 +160,8 @@
           lastResponse: {type: Object, notify: true},
         };
       }
-
       ready(){
         super.ready()
-        //this._printValues();  //Funcionalidad con funciones fetch
         this.cargar();
       }
       cargar() {
@@ -193,56 +191,6 @@
         this.$.connectBD.generateRequest();
         this.id = '';
       }
-
-      // saveInfo() {
-      //   let name =  this.$.name.value;
-      //   let age =  this.$.age.value;
-      //   let tel =  this.$.tel.value;
-      //   let data = {name: name, age: age, salary: tel};
-      //   fetch(this.urlUser, {
-      //        method: 'POST',
-      //        headers: {
-      //          "Content-type" : "application/json; charset=UTF-8"
-      //        },
-      //        body: JSON.stringify(data)
-      //     })
-      //     .then((resp) => resp.text())
-      //     .then((response) => {
-      //       console.info('fetch()', response);
-      //       this._printValues();
-      //       return response;
-      //   });
-      // }
-      // async _printValues() {
-      //   let dataUSU = await this._extractApi(this.urlUser);
-      //     this.list = dataUSU;
-      // }
-      // _extractApi(url) {
-      // return new Promise ((resolve, reject) => {
-      //   let URI = url;
-      //   fetch(URI)
-      //     .then(function(response) {return response.json();})
-      //     .then(function(json) {resolve(json);})
-      //     .catch(function(error){reject('No se pudo solcitar debido ' + error + ':(intente mas tarde');});
-      //   });
-      // }
-      // resetForm() {
-      //   this.$.name.value = "";
-      //   this.$.age.value = "";
-      //   this.$.tel.value = "";
-      // }
-      // delete(e) {
-      //   let id = e.target.value;
-      //   fetch(this.urlUser + id, {
-      //        method: 'DELETE'
-      //     }).then(() => {
-      //       this._printValues();
-      //       console.log('Eliminado');
-      //     }).catch(err => {
-      //       console.info(err);
-      //
-      //   });
-      // }
     }
     window.customElements.define(RegisterPerson.is, RegisterPerson);
   </script>
