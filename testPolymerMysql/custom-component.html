@@ -1,0 +1,84 @@
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+<link rel="import" href="bower_components/polymer/lib/elements/dom-repeat.html">
+<!--
+  Cells Certification Test
+  Template generated for use on test
+
+  IMPORTANT: Not import external libraries or use webcomponents.org components
+
+    For debug we recommended use Glitch environment, fork this template:
+
+    https://glitch.com/edit/#!/remix/cells-certification-template
+
+   REPLACE 'CustomComponent & custom-component' WITH THE NAME YOUR COMPONENT SHOULD HAVE
+
+   IF YOU DO NOT PASTE YOUR CODE FROM GLITCH YOUR ANSWER WILL BE CANCELED
+-->
+
+<dom-module id="custom-component">
+  <template>
+    <style>
+
+    </style>
+    Nombre: <input type="text" id="name" >
+    Phone: <input type="number" id="phone" >
+    <input type="hidden" id="idRegi" value="">
+    <button type="button" name="button" on-click="saveContact">Guardar</button>
+    <br><br>
+    <table border=1>
+      <tr><td> Nombre </td><td> Telefono </td><td> Acciones </td></tr>
+      <template is="dom-repeat" items="{{list}}">
+        <tr><td>{{item.name}}</td><td>{{item.phone}}</td><td><button type="button" id="button"  value="[[index]]" on-click="deleteContact"> Borrar </button><button type="button" id="button"  value="[[index]]" on-click="modContact"> Modificar </button></td></tr>
+      </table>
+      </template>
+  </template>
+
+  <script>
+    class CustomComponent extends Polymer.Element {
+      static get is() { return 'custom-component'; }
+      static get properties() {
+         return {
+            list: {
+                type: Array,
+                value: []
+           },
+           bande: {
+             type: String,
+             value: 0
+           }
+         };
+      }
+      saveContact() {
+        let nam = this.$.name.value;
+        let pho = this.$.phone.value;
+        let id = this.$.idRegi.value;
+        const exp = /^[a-zA-Z\s]*$/;
+            if (!nam.search(exp)){
+                if(this.bande == "0" && id != null && id == "") {
+                  //Alta de nuevo registro
+                  this.push('list', {name: nam, phone: pho});
+                } else if(this.bande == "1"){
+                  //Modificar registro
+                  this.splice('list', id , 1 ,{name: nam, phone: pho});
+                  this.bande = "0";
+                }
+            }
+          this.$.name.value = null;
+          this.$.phone.value = null;
+          this.$.idRegi.value = null;
+      }
+      deleteContact(e) {
+        let pos = e.target.value;
+        this.splice('list', pos, 1);
+      }
+      modContact(e) {
+        this.$.name.value = this.list[e.target.value].name;
+        this.$.phone.value = this.list[e.target.value].phone;
+        this.$.idRegi.value = e.target.value;
+        this.bande = "1";
+      }
+    }
+    customElements.define(CustomComponent.is, CustomComponent);
+  </script>
+</dom-module>

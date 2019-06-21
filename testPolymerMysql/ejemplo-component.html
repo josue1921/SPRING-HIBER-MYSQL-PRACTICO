@@ -1,0 +1,132 @@
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+<link rel="import" href="bower_components/paper-button/paper-button.html">
+
+<dom-module id="ejemplo-component">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    ID USUARIO : <input type="text" id="cta" on-blur="_evaluatioValu" value="{{cuenta}}">
+    <br><br>
+    <div id="generales" hidden$="{{!resulta}}">{{resulta}}</div>
+    <div id="posts" hidden$="{{!resulta}}">
+      <table border=1>
+        <thead>
+          <tr><th colspan="4"><center>Posts</center></th></tr>
+        </thead>
+        <tr><th>Tema</th><th><input type="text" id="te_maPost" size="90" value=""></th></tr>
+        <tr><th>Descripción</th><th><textarea name="name" rows="5" id="p_ostNew" cols="80"></textarea><br><button type="button" name="button" on-click="_publicPost">Publicar</button></th></tr>
+        <tbody id="_coments">
+        </tbody>
+      </table>
+    </div>
+  </template>
+  <script>
+    class EjemploComponent extends Polymer.Element {
+      static get is() { return 'ejemplo-component'; }
+      static get properties() {
+        return {
+          idDato: {
+            type: Number,
+            observer: "_obServerID"
+          },
+          resulta: String,
+          urlUSERS: {
+            type: String,
+            value: "https://jsonplaceholder.typicode.com/users/"
+          },
+          urlPOST: {
+            type: String,
+            value: "https://jsonplaceholder.typicode.com/posts/"
+          },
+          urlCOMM: {
+            type: String,
+            value: "https://jsonplaceholder.typicode.com/comments/"
+          },
+          datosCOM: Array
+        };
+      }
+      _evaluatioValu() {
+        this.idDato = this.$.cta.value;
+      }
+      _obServerID(valuAct, valuAnt) {
+        //extraemos el nuevo valor de la consulta de la API
+        this._printValues(valuAct);
+      }
+      //Obtener el calor de la respuesta en forma sincrona (fuera del then). la funcion devuelve una promesa
+      async _printValues(id) {
+        let dataUSU = await this._extractApi(this.urlUSERS, id);
+        this._printGenericDat(dataUSU);
+        let dataPOS = await this._extractApi(this.urlPOST, null);
+        this._printPostUsu(dataPOS, id);
+      }
+      _extractApi(url, id) {
+      return new Promise ((resolve, reject) => {
+        let URI = "";
+        (id === null) ? URI = url : URI = (url + id);
+        fetch(URI)
+          .then(function(response) {return response.json();})
+          .then(function(json) {resolve(json);})
+          .catch(function(error){reject('No se pudo solcitar debido ' + error + ':(intente mas tarde');});
+        });
+      }
+      _printGenericDat(data) {
+        const _divContent = this.$.generales;
+        _divContent.innerHTML = `
+          <table border=1>
+            <tr><td colspan="4"><center>Datos de la persona</center></td></tr>
+            <tr><td>Nombre: ${data.name}</td><td>Usuario: ${data.username}</td><td>Email: ${data.email}</td><td>Telefono: ${data.phone}</td></tr>
+            <tr><td colspan="4">Sitio WEB: ${data.website}</td></tr>
+            <tr><td colspan="4"><center>Datos de dirección</center></td></tr>
+            <tr><td>Calle: ${data.address.street}</td><td>Departamento: ${data.address.suite}</td><td>Ciudad: ${data.address.city}</td><td>CP: ${data.address.zipcode}</td></tr>
+            <tr><td colspan="4"><center>Datos de compania</center></td></tr>
+            <tr><td>Nombre Compañia: ${data.company.name}</td><td colspan="2">Información: ${data.company.catchPhrase}</td><td>BS: ${data.company.bs}</td></tr>
+          </table>
+        `;
+      }
+      _printPostUsu(data,idUsu) {
+        const _coments = this.$._coments;
+        const _filtering = data.filter(result => result.userId == idUsu);
+        let body = "";
+        if (_filtering.length > 0 ) {
+          for(let i = 0; i < _filtering.length; i++){
+            body += `<tr><th colspan="2">Post : ${_filtering[i].title}</br>${_filtering[i].body}</th></tr>`;
+          }
+          _coments.innerHTML = body;
+        } else {
+          _coments.innerHTML = " -- Sin comentarios -- "
+        }
+      }
+      _printCommPos(idPost) {
+        const _postComent = this.$._postComent;
+        const _filtering = data.filter(datos => datos.postId == idPost);
+        let body = "";
+        if(_filtering.length > 0 ) {
+          for(let i = 0; i < _filtering.length; i++){
+            body += 'Nombre: ' + _filtering[i].name + ' Email: ' + _filtering[i].body + '<br>';
+          }
+        }
+      return body;
+      }
+      _publicPost() {
+        const urlPOST = "https://jsonplaceholder.typicode.com/posts";
+        fetch(urlPOST, {
+           method: 'POST',
+           body: JSON.stringify({
+             title: this.$.te_maPost.value,
+             body: this.$.p_ostNew.value,
+             userId: this.idDato
+           }),
+           headers: {
+             "Content-type" : "application/json; charset=UTF-8"
+           }
+        })
+        .then(response => response.json())
+        .then(json => console.log(json))
+      }
+    }
+    window.customElements.define(EjemploComponent.is, EjemploComponent);
+  </script>
+</dom-module>

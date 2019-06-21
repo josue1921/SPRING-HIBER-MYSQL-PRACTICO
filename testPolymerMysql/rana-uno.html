@@ -1,0 +1,67 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
+
+<dom-module id="rana-uno">
+  <template>
+    <style>
+      :host {
+        --tool-colour: red;
+      }
+      .AnswerColour {
+        background-color: var(--tool-colour);
+      }
+    </style>
+    <input type="text" id="salto" value="" />
+    <button type="button" name="button" on-click="_salta">Saltar</button>
+    <br><br>
+    <table border="1">
+        <tr>
+            <template is="dom-repeat" items="{{espacio}}" style="style">
+            <td><div class='AnswerColour'>[[formattag(item)]]<div></td>
+            </template>
+        </tr>
+    </table>
+  </template>
+
+  <script>
+    class RanaUno extends Polymer.Element {
+      static get is() { return 'rana-uno'; }
+      static get properties() {
+        return {
+          espacio: {type: Array,value: [,,,,,,,,,,]} ,
+          posInitial: {type: Number},
+          posFinal: {type: Number, observer: '_obser2'},
+        };
+      }
+      _salta() {
+         let salto = this.$.salto.value;
+         let valorArray = this.espacio;
+         this.posInitial = valorArray.indexOf("R");
+         if (this.posInitial === -1) { this.posInitial = 0; }
+            this.splice('espacio',this.posInitial, 1, "");
+         if (this.posInitial === 9) { this.posInitial = 0; }
+            this.posFinal = this.posInitial+parseInt(salto);
+         if ( this.posFinal > 9 ){ this.posInitial = 0; }
+            this.splice('espacio',(this.posFinal > 9 ? this.posInitial : this.posFinal),1 , "R");
+      }
+      _obser2(newDato, oldDato) { console.log("Posicion final anterior: " + oldDato + " Posicion final nueva: " + newDato); }
+      formattag(e) {
+        let resultadoFinale = "";
+        //return (e === "R") ? resultadoFinale = "Rana rene" : resultadoFinale = "";
+        if (e === "R") {
+          resultadoFinale = "Rana";
+          Polymer.updateStyles({
+            '--tool-colour': 'green'});
+        } else {
+          resultadoFinale = " ";
+          Polymer.updateStyles({
+            '--tool-colour': 'red'});
+        }
+        return resultadoFinale;
+      }
+    }
+    window.customElements.define(RanaUno.is, RanaUno);
+  </script>
+</dom-module>
