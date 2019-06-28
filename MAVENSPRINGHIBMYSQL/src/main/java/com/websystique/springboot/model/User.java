@@ -41,6 +41,9 @@ public class User implements Serializable{
     @Column(name="ESTATUS", nullable=false)
     private String estatus;
     
+    @Column(name="ID_SEXO", nullable=false)
+    private String id_sexo;
+    
 
 	public Long getId() {
 		return id;
@@ -121,5 +124,12 @@ public class User implements Serializable{
 	public void setEstatus(String estatus) {
 		this.estatus = estatus;
 	}
-	
+
+	public String getId_sexo() {
+		return id_sexo;
+	}
+
+	public void setId_sexo(String id_sexo) {
+		this.id_sexo = id_sexo;
+	}
 }

@@ -1,9 +1,13 @@
 C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\configuration\JpaConfiguration.java
-C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\repositories\UserRepository.java
+C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\service\GenderService.java
 C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\util\CustomErrorType.java
-C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\controller\RestApiController.java
 C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\service\UserService.java
 C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\service\UserServiceImpl.java
-C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\controller\AppController.java
-C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\model\User.java
+C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\model\Gender.java
 C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\SpringBootCRUDApp.java
+C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\repositories\UserRepository.java
+C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\controller\RestApiController.java
+C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\controller\AppController.java
+C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\service\GenderServiceImpl.java
+C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\model\User.java
+C:\SPRING-HIBER-MYSQL-PRACTICO\MAVENSPRINGHIBMYSQL\src\main\java\com\websystique\springboot\repositories\GenderRepository.java

@@ -1,7 +1,6 @@
 package com.websystique.springboot.controller;
  
 import java.util.List;
- 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
- 
 import com.websystique.springboot.model.User;
 import com.websystique.springboot.service.UserService;
+import com.websystique.springboot.model.Gender;
+import com.websystique.springboot.service.GenderService;
 import com.websystique.springboot.util.CustomErrorType;
  
 @RestController
@@ -28,8 +28,7 @@ public class RestApiController {
     public static final Logger logger = LoggerFactory.getLogger(RestApiController.class);
  
     @Autowired
-    UserService userService; 
- 
+    UserService userService;
     // -------------------Devuelve todos los usuarios---------------------------------------------
  
     @RequestMapping(value = "/user/", method = RequestMethod.GET)
@@ -119,5 +118,18 @@ public class RestApiController {
         userService.deleteAllUsers();
         return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
     }
- 
+    
+    
+    @Autowired
+    GenderService genderService; 
+ // -------------------Devuelve los generos---------------------------------------------
+    
+    @RequestMapping(value = "/genero/", method = RequestMethod.GET)
+    public ResponseEntity<List<Gender>> listAllGender() {
+        List<Gender> gender = genderService.findAllGender();
+        if (gender.isEmpty()) {
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<List<Gender>>(gender, HttpStatus.OK);
+    }
 }

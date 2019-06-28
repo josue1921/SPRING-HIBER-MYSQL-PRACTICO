@@ -8,8 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
  
- 
- 
+
 @Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService{
@@ -56,5 +55,5 @@ public class UserServiceImpl implements UserService{
 	public boolean isUserExist(User user) {
         return findByName(user.getName()) != null;
     }
- 
+    
 }
