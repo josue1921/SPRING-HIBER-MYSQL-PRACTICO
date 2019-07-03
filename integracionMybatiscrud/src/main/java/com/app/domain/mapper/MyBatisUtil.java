@@ -1,4 +1,4 @@
-package com.app.domain.service;
+package com.app.domain.mapper;
 
 import java.io.IOException;
 import java.io.Reader;

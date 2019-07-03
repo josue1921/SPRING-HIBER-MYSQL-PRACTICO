@@ -1,9 +1,9 @@
-package com.app.domain.service;
+package com.app.domain.mapper;
 
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
-import com.app.domain.dto.User;
-import com.app.domain.mappers.UserMapper;
+
+import com.app.domain.entity.User;
  
 public class UserService
 {

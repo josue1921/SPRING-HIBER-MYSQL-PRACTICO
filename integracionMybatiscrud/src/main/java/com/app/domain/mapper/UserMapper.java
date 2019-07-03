@@ -1,7 +1,8 @@
-package com.app.domain.mappers;
+package com.app.domain.mapper;
 
 import java.util.List;
-import com.app.domain.dto.User;
+
+import com.app.domain.entity.User;
  
 
 public interface UserMapper {

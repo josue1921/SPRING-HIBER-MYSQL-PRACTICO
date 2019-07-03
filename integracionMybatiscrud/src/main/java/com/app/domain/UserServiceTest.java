@@ -5,9 +5,9 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
- 
-import com.app.domain.dto.User;
-import com.app.domain.service.UserService;
+
+import com.app.domain.entity.User;
+import com.app.domain.mapper.UserService;
  
 public class UserServiceTest 
 {

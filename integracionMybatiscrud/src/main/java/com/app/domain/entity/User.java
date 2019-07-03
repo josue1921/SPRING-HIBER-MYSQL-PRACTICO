@@ -1,4 +1,4 @@
-package com.app.domain.dto;
+package com.app.domain.entity;
 
 public class User {
 	private Integer userId;
