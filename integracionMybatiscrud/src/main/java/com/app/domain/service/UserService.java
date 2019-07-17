@@ -1,31 +1,33 @@
-package com.app.domain.mapper;
+package com.app.domain.service;
 
 import java.util.List;
 import org.apache.ibatis.session.SqlSession;
-
 import com.app.domain.entity.User;
+import com.app.domain.mapper.UserMapper;
  
 public class UserService
 {
  
  public void insertUser(User user) {
   SqlSession sqlSession = MyBatisUtil.getSqlSessionFactory().openSession();
+  
   try{
-  UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-  userMapper.insertUser(user);
-  sqlSession.commit();
-  }finally{
-   sqlSession.close();
+	  UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+	  userMapper.insertUser(user);
+	  sqlSession.commit();
+  } finally {
+	 sqlSession.close();
   }
  }
  
  public User getUserById(Integer userId) {
   SqlSession sqlSession = MyBatisUtil.getSqlSessionFactory().openSession();
+  
   try{
-  UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-  return userMapper.getUserById(userId);
-  }finally{
-   sqlSession.close();
+	  UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+	  return userMapper.getUserById(userId);
+  } finally {
+	  sqlSession.close();
   }
  }
  

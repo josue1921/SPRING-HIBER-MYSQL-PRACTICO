@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="  
+           http://www.springframework.org/schema/beans  
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+           http://www.springframework.org/schema/aop  
+           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/context  
+           http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+     
+     <!-- Introduce jdbc configuration file -->  
+     <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+               <value>classpath:properties/*.properties</value>
+                <!--If you have more than one configuration file, you just need to add it here -->
+            </list>
+        </property>
+    </bean>
+    
+    
+
+	<!-- Configuring data sources -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<!-- Configuration without using properties -->
+		<!-- <property name="driverClassName" value="com.mysql.jdbc.Driver" /> 
+			<property name="url" value="jdbc:mysql://localhost:3306/learning" /> 
+			<property name="username" value="root" /> 
+			<property name="password" value="christmas258@" /> -->
+	   <!-- Use properties to configure -->
+		<property name="driverClassName">
+			<value>${jdbc_driverClassName}</value>
+		</property>
+		<property name="url">
+			<value>${jdbc_url}</value>
+		</property>
+		<property name="username">
+			<value>${jdbc_username}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc_password}</value>
+		</property>
+	</bean>
+
+	<!-- All mapper interface files corresponding to XxxxMapper.xml are scanned automatically, so there is no need to configure the mapping of Mpper manually one by one, as long as the Mapper interface class corresponds to the Mapper mapping file. -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.app.dao" />
+	</bean>
+
+    <!-- Configure Mybatis file, mapperLocations ** Mapper.xml file location, configLocation configuration mybatis-config file location -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+        <property name="mapperLocations" value="classpath*:com/app/mapper/**/*.xml"/>  
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />
+		<!-- <property name="typeAliasesPackage" value="com.tiantian.ckeditor.model" 
+			/> -->
+	</bean>
+
+	<!-- Automatic Scanning Annotation bean -->
+	<context:component-scan base-package="com.app.service" />
+
+</beans>
