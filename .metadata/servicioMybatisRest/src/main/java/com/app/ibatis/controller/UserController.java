@@ -40,18 +40,24 @@ public class UserController {
 		try {
 			Set<ConstraintViolation<User>> validateErrors = validator.validate(user);
 			if (validateErrors.isEmpty()) {
+				logger.info("Validacion validateErrors es concluida..");
 				if (userMapper.findByEmail(user.getEmail()) != null) {
-					serviceResponse.put("Email existente", "La direccion de mail ya se encuentra registrado");
+					logger.info("Validacion de mail existente exitosa, existe ya un mail en la BD..");
+					serviceResponse.put("message", "La direccion de mail ya se encuentra registrado.");
+					return Response.status(400).entity(serviceResponse).build();
 				} else {
+					logger.info("Inicia el insert y registro de los datos en BD..");
 					Integer createPerson = userMapper.insertUser(user);
 
 					if (createPerson != 1) {
-						serviceResponse.put("created", "unable to create user");
+						logger.info("No se pudo crear al usuario..");
+						serviceResponse.put("message", "No se puede crear el usuario");
 					} else {
 						logger.info("SUCCES USUARIO CREADO.");
-						serviceResponse.put("EXITO", "Usuario Registrado");
+						serviceResponse.put("message", "Usuario Registrado");
 					}
 				}
+				logger.info("Responde con peticion aceptada estatus 200 todo exitoso..");
 				return Response.status(Response.Status.CREATED).entity(serviceResponse).build();
 			} else {
 				logger.info("Failed to create a user due to field validation errors.");
@@ -70,19 +76,22 @@ public class UserController {
 	@GET
 	@Produces("application/json")
 	public Response getUsers() {
-
+		logger.info("Entra obtener el total de datos de usuarios.");
 		LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
 		try {
 			List<User> listUsers = userMapper.getUsers();
 			if (listUsers == null) {
+				logger.info("Sin datos.");
 				response.put("users", Collections.emptyMap());
 			} else {
+				logger.info("Consulta exitosa, existen datos.");
 				response.put("total", listUsers.size());
 				response.put("users", listUsers);
 			}
+			logger.info("Se devuelven los datos y se expone el servicio.");
 			return Response.status(Response.Status.OK).entity(listUsers).build();
 		} catch (Exception ex) {
-
+			logger.info("Ocurrio un error en el proceso de la consulta.");
 			response.put("user", "Not Found");
 			return Response.status(Response.Status.BAD_REQUEST).entity(response).build();
 		}
@@ -105,14 +114,14 @@ public class UserController {
 					serviceResponse.put("msg", "User Not Found");
 				} else {
 					if (userMapper.findByEmailNotUser(user.getEmail(), user.getId()) != null) {
-						serviceResponse.put("duplicate_Email", "user already exist");
+						serviceResponse.put("message", "Usuario ya existe en la BD");
 					} else {
 						int updateUser = userMapper.updateUser(user);
 						if (updateUser == 0) {
-							serviceResponse.put("created", "unable to update User");
+							serviceResponse.put("message", "No se puede actualizar el usuario");
 						} else {
 							logger.info("Successfully update user.");
-							serviceResponse.put("update", user);
+							serviceResponse.put("message", "Se actualizo el usuario exitosamente.");
 						}
 					}
 				}

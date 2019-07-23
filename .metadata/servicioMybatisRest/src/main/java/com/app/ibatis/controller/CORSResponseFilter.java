@@ -13,11 +13,11 @@ public class CORSResponseFilter implements ContainerResponseFilter {
 			throws IOException {
 
 		MultivaluedMap<String, Object> headers = responseContext.getHeaders();
-
 		headers.add("Access-Control-Allow-Origin", "*");
-		// headers.add("Access-Control-Allow-Origin", "http://abcd.org"); //allows CORS
-		// requests only coming from abcd.org
-		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
-		headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
+		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS");
+		headers.add("Access-Control-Allow-Headers", "X-Auth-Token, Content-Type");
+		headers.add("Access-Control-Expose-Headers", "custom-header1, custom-header2");
+		headers.add("Access-Control-Allow-Credentials", "false");
+		headers.add("Access-Control-Max-Age", "4800");
 	}
 }

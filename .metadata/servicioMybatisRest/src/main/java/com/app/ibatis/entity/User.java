@@ -16,11 +16,11 @@ public class User {
 	
 	@Size(min = 2, max =50)
     @Pattern(regexp = "[A-Za-z. ]*", message = "First name requires valid character")
-    private String firstname;
+    private String first_name;
 
     @Size(min = 2, max =50)
     @Pattern(regexp = "[A-Za-z. ]*", message = "First name requires valid character")
-    private String lastname;
+    private String last_name;
 
 
     //@Column(unique = true)
@@ -33,10 +33,9 @@ public class User {
     @Pattern(regexp = "[A-Za-z.0-9 ]*", message = "First name requires valid character")
     private String password;
 
-    @Pattern(regexp = "[0-9.\\-+ ]*", message = "Phone requires valid alphanumaric characters")
-    private String phone;
-
-    private int age;
+//    @Pattern(regexp = "[0-9.\\-+ ]*", message = "Phone requires valid alphanumaric characters")
+//    private String phone;
+//    
     /*setter getter method here*/
 
 	public int getId() {
@@ -47,20 +46,20 @@ public class User {
 		this.id = id;
 	}
 
-	public String getFirstname() {
-		return firstname;
+	public String getFirst_name() {
+		return first_name;
 	}
 
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setFirst_name(String first_name) {
+		this.first_name = first_name;
 	}
 
-	public String getLastname() {
-		return lastname;
+	public String getLast_name() {
+		return last_name;
 	}
 
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
+	public void setLast_name(String last_name) {
+		this.last_name = last_name;
 	}
 
 	public String getEmail() {
@@ -77,22 +76,6 @@ public class User {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
-	public int getAge() {
-		return age;
-	}
-
-	public void setAge(int age) {
-		this.age = age;
-	}  
+	} 
     
 }
