@@ -63,7 +63,7 @@ public class UserController {
 				logger.info("Failed to create a user due to field validation errors.");
 				logger.debug("Unable to create a user due to validation errors using {}", user);
 				// JSONObject jsonObj = new JSONObject(validateErrors.toString());
-				serviceResponse.put("error", validateErrors.toString());
+				serviceResponse.put("message", validateErrors.toString());
 				return Response.status(400).entity(serviceResponse).build();
 
 			}

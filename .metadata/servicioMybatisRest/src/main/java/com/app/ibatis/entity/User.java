@@ -15,11 +15,11 @@ public class User {
 	private int id;
 	
 	@Size(min = 2, max =50)
-    @Pattern(regexp = "[A-Za-z. ]*", message = "First name requires valid character")
+    @Pattern(regexp = "[A-Za-zÑñÁáÉéÍíÓóÚúÜü\\s]*", message = "First name requires valid character")
     private String first_name;
 
     @Size(min = 2, max =50)
-    @Pattern(regexp = "[A-Za-z. ]*", message = "First name requires valid character")
+    @Pattern(regexp = "[A-Za-zÑñÁáÉéÍíÓóÚúÜü\\s]*", message = "First name requires valid character")
     private String last_name;
 
 
