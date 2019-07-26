@@ -21,7 +21,7 @@ import java.util.Set;
 
 
 @Controller
-@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+@CrossOrigin(origins = "*", methods= {RequestMethod.GET,RequestMethod.POST,RequestMethod.PUT, RequestMethod.DELETE})
 @Path("/users")
 public class UserController {
 	static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -105,36 +105,42 @@ public class UserController {
 		// logger.debug(">> create({})", personJson);
 		// LinkedHashMap<Object, Object> apiResponse = new LinkedHashMap<>();
 		LinkedHashMap<Object, Object> serviceResponse = new LinkedHashMap<Object, Object>();
-		logger.info("Starting to create a person");
+		logger.info("Comienza con la carga de los datos a editar");
 
 		try {
 			Set<ConstraintViolation<User>> validateErrors = validator.validate(user);
+			logger.info("Entro a validar validateErrors");
 			if (validateErrors.isEmpty()) {
 				if (userMapper.findById(id) == null) {
-					serviceResponse.put("msg", "User Not Found");
+					logger.info("Id que se quiere actualizar no existe");
+					serviceResponse.put("message", "Usuario no existe.");
 				} else {
 					if (userMapper.findByEmailNotUser(user.getEmail(), user.getId()) != null) {
 						serviceResponse.put("message", "Usuario ya existe en la BD");
+						logger.info("El usuarios si existe en la BD..");
 					} else {
 						int updateUser = userMapper.updateUser(user);
 						if (updateUser == 0) {
 							serviceResponse.put("message", "No se puede actualizar el usuario");
+							logger.info("No se puede actualizar al usuario..");
 						} else {
-							logger.info("Successfully update user.");
 							serviceResponse.put("message", "Se actualizo el usuario exitosamente.");
+							logger.info("Modificacion exitosa.");
 						}
 					}
 				}
-				return Response.status(Response.Status.OK).entity(user).build();
+				//return Response.status(Response.Status.OK).entity(user).build();
+				return Response.status(Response.Status.OK).entity(serviceResponse).build();
 			} else {
 				logger.info("Failed to update a user due to field validation errors.");
 				// logger.debug("Unable to update a user due to validation errors using {}",
 				// personJson);
-				serviceResponse.put("error", validateErrors.toString());
-
+				logger.info("La validacion validateErrors encontro un error..");
+				serviceResponse.put("message", validateErrors.toString());
 				return Response.status(400).entity(serviceResponse).build();
 			}
 		} catch (Exception e) {
+			logger.info("Se encontro un error en el flujo..");
 			logger.debug("<< create()");
 			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(serviceResponse).build();
 		}

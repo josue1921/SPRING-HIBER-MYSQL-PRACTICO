@@ -24,7 +24,7 @@ public interface UserMapper {
     @Select("select * from user")
     List<User> getUsers();
 
-    @Update("UPDATE USER SET first_name = #{user.first_name},last_name = #{user.last_name},email = #{user.email},phone = #{user.phone},age = #{user.age} WHERE id = #{user.id}")
+    @Update("UPDATE USER SET first_name = #{user.first_name},last_name = #{user.last_name},email = #{user.email}, password = #{user.password} WHERE id = #{user.id}")
     Integer updateUser(@Param("user") User user) throws Exception;
 
     @Delete("DELETE from user where id = #{id}")
