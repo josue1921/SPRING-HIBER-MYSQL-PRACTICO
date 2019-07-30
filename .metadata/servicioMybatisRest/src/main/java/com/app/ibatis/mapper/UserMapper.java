@@ -2,6 +2,7 @@ package com.app.ibatis.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.*;
 import com.app.ibatis.entity.User;
+import com.app.ibatis.entity.Constact;
 
 @Mapper
 public interface UserMapper {
@@ -14,6 +15,9 @@ public interface UserMapper {
     @Select("select * from user where email = #{email} AND id!=#{id}")
     User findByEmailNotUser(@Param("email") String email,@Param("id") Integer id);
 
+    @Select("select a.* from contact as a,user_contact as b  where a.id_contac = b.Id_contac and b.id_user = (select id from user where email = #{email})")
+    List<Constact> findContact(@Param("email") String email);
+    
     @Select("select * from user where id = #{id}")
     User findById(@Param("id") Integer id);
 
@@ -29,4 +33,5 @@ public interface UserMapper {
 
     @Delete("DELETE from user where id = #{id}")
     Integer deleteById(@Param("id") Integer id);
+    
 }

@@ -1,6 +1,7 @@
 package com.app.ibatis.controller;
 
 import com.app.ibatis.entity.User;
+import com.app.ibatis.entity.Constact;
 import com.app.ibatis.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMethod;
-
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -168,7 +168,65 @@ public class UserController {
 			return Response.status(Response.Status.BAD_REQUEST).entity(response).build();
 		}
 	}
-
+	
+	@GET
+	@Path("/{email},{password}")
+	@Produces("application/json")
+	public Response loginUser(@PathParam("email") String userEmail, @PathParam("password") String userPassword) {
+		logger.info("Entro a validar datos de usuario.");
+		LinkedHashMap<Object, Object> serviceResponse = new LinkedHashMap<Object, Object>();
+		try {
+			if (userMapper.findByEmail(userEmail) != null) {
+				logger.info("El usuario y/o correo, ingresado si se encuentra registrado.");
+				if (userMapper.login(userEmail, userPassword) != null) {
+					logger.info("Autentica credenciales de usuario.");
+					serviceResponse.put("message", "AUTENTICADO");
+		            return Response.status(Response.Status.OK).entity(serviceResponse).build();
+				} else {
+					logger.info("Contraseña incorrecta.");
+					serviceResponse.put("message", "Contraseña es incorrecta, validar.");
+					return Response.status(Response.Status.UNAUTHORIZED).entity(serviceResponse).build();
+				}
+			} else {
+				logger.info("El usuario y/o correo, ingresado no existe.");
+				serviceResponse.put("message", "Usuario ingresado no existe.");
+				return Response.status(Response.Status.UNAUTHORIZED).entity(serviceResponse).build();
+			}
+			
+        } catch (Exception e) {
+            logger.debug("<< create()");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(serviceResponse).build();
+        }
+	}
+	
+	@GET
+	@Path("/{email}")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public Response userContactos(@PathParam("email") String userEmail) { 
+		logger.info("Entro a extraer contactos del usuario.");
+		LinkedHashMap<String, Object> response = new LinkedHashMap<String, Object>();
+		try {
+			logger.info("Comienza la busqueda de contactos para: " + userEmail );
+			List<Constact> listContact = userMapper.findContact(userEmail );
+			if (listContact == null) {
+				logger.info("Sin datos.");
+				response.put("users", Collections.emptyMap());
+			} else {
+				logger.info("Consulta exitosa, existen datos.");
+				response.put("total", listContact.size());
+				response.put("contacts", listContact);
+			}
+			logger.info("Se devuelven los datos y se expone el servicio.");
+			return Response.status(Response.Status.OK).entity(listContact).build();
+		} catch (Exception e) {
+            logger.debug("<< search()");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(response).build();
+        }
+	}
+	
+	
+	
 	@DELETE
     @Path("/{id}")
     @Consumes("application/json")
@@ -196,4 +254,14 @@ public class UserController {
         }
     }
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 }
