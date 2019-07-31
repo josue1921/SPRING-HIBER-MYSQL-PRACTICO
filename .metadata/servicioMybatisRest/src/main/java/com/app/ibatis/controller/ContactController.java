@@ -1,6 +1,5 @@
 package com.app.ibatis.controller;
 import com.app.ibatis.entity.Constact;
-import com.app.ibatis.entity.User;
 import com.app.ibatis.mapper.ContactMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,23 +32,20 @@ public class ContactController {
 	@Produces("application/json")
 	public Response create(Constact constact) {
 		LinkedHashMap<Object, Object> serviceResponse = new LinkedHashMap<Object, Object>();
-		logger.info("Inicia la creación de usuarios..");
+		logger.info("Inicia el registro de contacto..");
 		
 		try {
 			Set<ConstraintViolation<Constact>> validateErrors = validator.validate(constact);
 			if (validateErrors.isEmpty()) {
-				logger.info("Validacion validateErrors es concluida..");
 					logger.info("Inicia el insert y registro de los datos en BD..");
-					Integer createPerson = contactMapper.insertContact(constact);
-
-					if (createPerson != 1) {
-						logger.info("No se pudo crear al usuario..");
-						serviceResponse.put("message", "No se puede crear el contacto");
-					} else {
-						logger.info("SUCCES USUARIO CREADO.");
+ 					String responsePlSql = contactMapper.insertContact(constact);
+					if (responsePlSql.equals("SUCCESS")) {
+						logger.info("Creacion de contacto exitoso.");
 						serviceResponse.put("message", "Contacto Registrado");
+					} else {
+						logger.info("No se pudo crear al contacto..");
+						serviceResponse.put("message", "No se puede crear el contacto");
 					}
-				
 				logger.info("Responde con peticion aceptada estatus 200 todo exitoso..");
 				return Response.status(Response.Status.CREATED).entity(serviceResponse).build();
 			} else {

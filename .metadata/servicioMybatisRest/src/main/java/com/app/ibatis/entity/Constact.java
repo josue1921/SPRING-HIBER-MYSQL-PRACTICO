@@ -1,11 +1,15 @@
 package com.app.ibatis.entity;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotEmpty;
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 public class Constact {
@@ -22,6 +26,8 @@ public class Constact {
     @NotEmpty(message = "Email requires non empty value")
     @Email(message =    "Email no tiene formato correcto")
     private String mail;
+    
+    private String mailuser;
 
     @Pattern(regexp = "[0-9.\\-+ ]*", message = "Telefono solo acepta numeros.")
     private String phone;
@@ -60,7 +66,14 @@ public class Constact {
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
-
+	
+	public String getMailuser() {
+		return mailuser;
+	}
+	public void setMailuser(String mailuser) {
+		this.mailuser = mailuser;
+	}
+	
 	public String getPhoto() {
 		return photo;
 	}
@@ -68,9 +81,5 @@ public class Constact {
 	public void setPhoto(String photo) {
 		this.photo = photo;
 	}
-	
-	
-	
-
-    
+  
 }

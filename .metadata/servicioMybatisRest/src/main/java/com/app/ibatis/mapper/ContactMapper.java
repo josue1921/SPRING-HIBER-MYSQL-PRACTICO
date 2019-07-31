@@ -4,13 +4,16 @@ import com.app.ibatis.entity.Constact;
 
 import java.util.List;
 import org.apache.ibatis.annotations.*;
-import com.app.ibatis.entity.Constact;
+import org.apache.ibatis.mapping.StatementType;
 
 @Mapper
 public interface ContactMapper {
-    @Insert("INSERT INTO CONTACT ( name, phone, mail, photo ) VALUES ( #{contact.name}, #{contact.phone},#{contact.mail},#{contact.photo})")
-    Integer insertContact(@Param("contact") Constact constact) throws Exception;
-
+    //@Insert("INSERT INTO CONTACT ( name, phone, mail, photo ) VALUES ( #{contact.name}, #{contact.phone},#{contact.mail},#{contact.photo})")
+	//Integer insertContact(@Param("contact") Constact constact) throws Exception;
+	
+    @Select(value = "{CALL SIMPLEPROC(#{contact.name}, #{contact.phone},#{contact.mail},#{contact.photo}, #{contact.mailuser})}")
+    @Options(statementType = StatementType.CALLABLE) String insertContact(@Param("contact") Constact constact) throws Exception;   
+    
     @Select("select * from contact")
     List<Constact> getContacts();
 }
