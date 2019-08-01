@@ -84,4 +84,45 @@ public class ContactController {
 			return Response.status(Response.Status.BAD_REQUEST).entity(response).build();
 		}
 	}
+	
+	@DELETE
+	@Path("/{id},{mail}")
+	@Consumes("application/json")
+	@Produces("application/json")
+	public Response lowContact(@PathParam("id") int personId, @PathParam("mail") String mailUser) {
+        LinkedHashMap<Object, Object> serviceResponse = new LinkedHashMap<Object, Object>();
+        logger.info("Comenzo la baja de contacto");
+
+        try {
+            String deleteContact = contactMapper.lowPersonContact(personId, mailUser);
+            logger.info("Estatus peticion: " + deleteContact);
+            if (deleteContact.equals("SUCCESS")) {
+                serviceResponse.put("message", "Se elimino correctamente");
+            } else {
+                logger.info("Ocurrio un problema en la baja del contacto.");
+                logger.info("El plsql reporto: " + deleteContact);
+                serviceResponse.put("message", deleteContact);
+            }
+            return Response.status(Response.Status.OK).entity(serviceResponse).build();
+
+        } catch (Exception e) {
+            logger.debug("<< create()");
+            serviceResponse.put("message", "Error interno del servidor");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(serviceResponse).build();
+        }
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
