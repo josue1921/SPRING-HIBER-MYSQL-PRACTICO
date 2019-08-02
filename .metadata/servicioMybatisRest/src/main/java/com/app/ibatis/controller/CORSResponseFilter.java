@@ -11,7 +11,8 @@ public class CORSResponseFilter implements ContainerResponseFilter {
 	@Override
 	public void filter(ContainerRequestContext requestContext, ContainerResponseContext responseContext)
 			throws IOException {
-
+		
+		//se definen las reglas de CORS control de acceso a servicio 
 		MultivaluedMap<String, Object> headers = responseContext.getHeaders();
 		headers.add("Access-Control-Allow-Origin", "*");
 		headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
