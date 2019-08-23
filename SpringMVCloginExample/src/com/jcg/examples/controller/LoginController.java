@@ -1,7 +1,6 @@
 package com.jcg.examples.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +65,7 @@ public class LoginController {
 				boolean isValidUser = loginDelegate.isValidUser(loginBean.getUsername(), loginBean.getPassword());
 				if (!isValidUser) {
 					bindingresult.addError(new ObjectError("invalid", "Invalid Credentials!!!"));
+					session.setMaxInactiveInterval(60);
 					request.setAttribute("loggedInUser", loginBean.getUsername());
 					return new ModelAndView("error");
 				} else {
@@ -80,7 +80,7 @@ public class LoginController {
 		return view;
 	}
 
-	@RequestMapping("/logout")
+	@RequestMapping("logout")
 	public String logout(HttpSession session, Model model) {
 		session.invalidate();
 		LoginBean login = new LoginBean();
