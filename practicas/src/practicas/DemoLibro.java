@@ -12,7 +12,16 @@ class DemoLibro {
 //        for (int i=0; i<libros.length;i++) {
 //        	libros[i].mostrar();
 //        }
-		Saludo s = new Saludo("Palabra doce");	
+		//Saludo s = new Saludo("Palabra doce");
+		int a = 5;
+		int b = 6;
+		int c = 0;
+		a++;
+		++b;
+		c += b;
+		System.out.println(a);
+		System.out.println(b);
+		System.out.println(c);
 	}
 }
 
